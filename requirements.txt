@@ -1,0 +1,13 @@
+# GPU 서버용 (pytorch/pytorch:2.11.0-cuda12.8-cudnn9-devel 기준)
+# torch는 Docker 이미지에 이미 포함 → 설치 불필요
+transformers>=4.45.0
+accelerate>=0.30.0
+opencv-python>=4.9.0
+moviepy>=1.0.3
+pydantic>=2.0.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-dotenv>=1.0.0
+rich>=13.0.0
+pytest>=8.0.0
+qwen-vl-utils>=0.0.8

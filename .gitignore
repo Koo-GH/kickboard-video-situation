@@ -1,0 +1,35 @@
+# 가상환경
+.venv/
+venv/
+
+# 모델 가중치 (용량 크므로 git 제외, scp로 별도 전송)
+models/
+
+# 출력 데이터
+data/outputs/
+data/samples/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 환경변수
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# 로그
+*.log
+
+# 임시 파일
+tmp/
+temp/

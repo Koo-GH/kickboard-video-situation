@@ -1,0 +1,16 @@
+# Windows 로컬 (GTX 1080, CUDA) 개발용
+# torch는 별도 설치 필요:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+transformers>=4.45.0
+accelerate>=0.30.0
+opencv-python>=4.9.0
+moviepy>=1.0.3
+pydantic>=2.0.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-dotenv>=1.0.0
+rich>=13.0.0
+pytest>=8.0.0
+qwen-vl-utils>=0.0.8
+huggingface_hub>=0.23.0
+bitsandbytes>=0.43.0
