@@ -36,7 +36,7 @@ class QwenVLModel(VideoSituationModel):
         model_path: Optional[str] = None,
         device: str = "auto",
         max_new_tokens: int = 512,
-        n_frames: int = 8,
+        n_frames: int = 16,
     ):
         """
         Args:

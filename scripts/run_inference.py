@@ -23,7 +23,7 @@ from rich.json import JSON
 console = Console()
 
 
-def get_model(model_type: str, model_path: str | None = None):
+def get_model(model_type: str, model_path: str | None = None, n_frames: int = 16):
     """모델 타입에 따라 적절한 모델 인스턴스를 반환한다."""
     if model_type == "mock":
         from src.models.mock_model import MockModel
@@ -32,7 +32,7 @@ def get_model(model_type: str, model_path: str | None = None):
     elif model_type == "qwen2_5_vl":
         try:
             from src.models.qwen_vl import QwenVLModel
-            return QwenVLModel(model_path=model_path)
+            return QwenVLModel(model_path=model_path, n_frames=n_frames)
         except ImportError as e:
             console.print(f"[red]Qwen2.5-VL 로드 실패: {e}[/red]")
             console.print("[yellow]torch/transformers가 설치되어 있는지 확인하세요.[/yellow]")
@@ -105,7 +105,7 @@ def run(args):
 
     # 모델 로드
     console.print(f"[cyan]모델 로딩 중...[/cyan]")
-    model = get_model(args.model, args.model_path)
+    model = get_model(args.model, args.model_path, args.n_frames)
     console.print(f"[green]모델 준비 완료: {model}[/green]")
 
     # 순차 분석
@@ -136,6 +136,12 @@ def main():
         "--output",
         default="data/outputs",
         help="결과 저장 디렉터리 (기본: data/outputs)",
+    )
+    parser.add_argument(
+        "--n-frames",
+        type=int,
+        default=16,
+        help="영상에서 샘플링할 프레임 수 (기본: 16)",
     )
     args = parser.parse_args()
     run(args)
