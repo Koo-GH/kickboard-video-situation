@@ -39,7 +39,7 @@ def download_model(model_id: str, output_dir: Path):
         ignore_patterns=["*.msgpack", "*.h5", "flax_model*"],  # 불필요한 파일 제외
     )
 
-    console.print(f"\n[green]✓ 다운로드 완료: {local_dir}[/green]")
+    console.print(f"\n[green]OK 다운로드 완료: {local_dir}[/green]")
     console.print(
         f"\n서버 전송 명령 (Git Bash / WSL):\n"
         f"  scp -r {local_dir} cvlab308@10.10.15.112:/workspace/models/"

@@ -68,31 +68,36 @@ def run(args):
     console.print(f"[cyan]영상 분석 중...[/cyan]")
     result = model.analyze(video_path)
 
-    # 결과 출력
+    # 결과 저장
+    json_path = output_dir / f"{video_path.stem}_output.json"
+    summary_path = output_dir / f"{video_path.stem}_output_summary.md"
+
+    with open(json_path, "w", encoding="utf-8") as f:
+        f.write(result.model_dump_json(indent=2))
+    
+    with open(summary_path, "w", encoding="utf-8") as f:
+        f.write(result.to_summary())
+
+    # 결과 출력 (터미널)
     result_dict = result.model_dump()
     # Enum → 문자열 변환
     result_dict["primary_situation"] = result.primary_situation.value
     result_dict["secondary_situations"] = [s.value for s in result.secondary_situations]
     result_dict["risk_level"] = result.risk_level.value
 
-    console.print(Panel(JSON(json.dumps(result_dict, ensure_ascii=False, indent=2)),
-                        title="[분석 결과]"))
-    console.print(Panel(result.to_summary(), title="[요약]"))
+    try:
+        console.print(Panel(JSON(json.dumps(result_dict, ensure_ascii=False, indent=2)),
+                            title="[분석 결과]"))
+    except UnicodeEncodeError:
+        console.print("[warning]터미널 인코딩 문제로 JSON 전체 출력을 생략합니다.[/warning]")
+        
+    try:
+        console.print(Panel(result.to_summary(), title="[요약]"))
+    except UnicodeEncodeError:
+        pass
 
-    # 파일 저장
-    stem = video_path.stem if video_path.exists() else "mock_output"
-    json_path = output_dir / f"{stem}.json"
-    summary_path = output_dir / f"{stem}_summary.md"
-
-    json_path.write_text(
-        json.dumps(result_dict, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    summary_path.write_text(
-        f"# 분석 결과: {stem}\n\n{result.to_summary()}\n", encoding="utf-8"
-    )
-
-    console.print(f"\n[green]OK JSON 저장: {json_path}[/green]")
-    console.print(f"[green]OK 요약 저장: {summary_path}[/green]")
+    console.print(f"\n[green]OK JSON 저장됨:[/green] {json_path}")
+    console.print(f"[green]OK 요약 저장됨:[/green] {summary_path}")
 
 
 def main():
