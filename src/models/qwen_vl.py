@@ -110,7 +110,7 @@ class QwenVLModel(VideoSituationModel):
                     {
                         "type": "video",
                         "video": str(video_path),
-                        "max_pixels": 360 * 420,
+                        "max_pixels": 768 * 768,
                         "nframes": self._n_frames,
                     },
                     {"type": "text", "text": SYSTEM_PROMPT},
