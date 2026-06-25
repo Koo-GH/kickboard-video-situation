@@ -25,6 +25,7 @@
 - 도로 상태 불량 또는 노면 위험
 - 역주행, 인도 주행, 차도 주행 등 주행 위치 관련 상황
 - 헬멧 미착용 등 보호장구 관련 위험 상황
+- 여러 명이 함께 탑승하는 동승 주행 위험 상황
 - 영상 품질 저하 등으로 인한 사람 검토 필요 상황
 
 ### 2.2 MVP 목표
@@ -203,6 +204,7 @@ kickboard-video-situation/
 | `normal_riding` | 특이 위험 없이 정상 주행 | low |
 | `roadway_riding` | 차도에서 킥보드를 주행 중인 상황 | medium |
 | `no_helmet` | 운전자가 헬멧을 착용하지 않은 것으로 보이는 상황 | high |
+| `multiple_riders` | 2인 이상 킥보드에 함께 탑승하여 주행 중인 상황 | high |
 | `pedestrian_risk` | 보행자가 가까이 있거나 진행 경로와 겹침 | high |
 | `vehicle_risk` | 차량이 가까이 있거나 충돌 가능성이 있음 | high |
 | `obstacle_risk` | 전방 또는 측면에 장애물이 있음 | medium |
