@@ -12,6 +12,7 @@ class SituationLabel(str, Enum):
     roadway_riding = "roadway_riding"
     no_helmet = "no_helmet"
     multiple_riders = "multiple_riders"
+    single_rider = "single_rider"
     pedestrian_risk = "pedestrian_risk"
     vehicle_risk = "vehicle_risk"
     obstacle_risk = "obstacle_risk"
