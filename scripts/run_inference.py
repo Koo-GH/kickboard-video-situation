@@ -108,18 +108,6 @@ def run(args):
     model = get_model(args.model, args.model_path)
     console.print(f"[green]모델 준비 완료: {model}[/green]")
 
-    # 실행 중인 프롬프트 디버그 출력
-    if args.model == "qwen2_5_vl":
-        from src.analysis.prompts import SYSTEM_PROMPT
-        lines = SYSTEM_PROMPT.strip().split("\n")
-        # '극히 주의:'가 포함된 줄을 찾아서 출력해줌으로써 업데이트 여부를 즉시 확인 가능하게 함
-        caution_line = next((l for l in lines if "극히 주의:" in l), "주의 지침 없음")
-        console.print(Panel(
-            f"[bold yellow]Caution 지침:[/bold yellow] {caution_line.strip()}\n"
-            f"[bold blue]프롬프트 첫 줄:[/bold blue] {lines[0]}",
-            title="[실행 프롬프트 버전 검증]"
-        ))
-
     # 순차 분석
     for v_path in video_paths:
         analyze_video(model, v_path, output_dir)
