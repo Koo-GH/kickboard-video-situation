@@ -7,6 +7,15 @@ import json
 from pathlib import Path
 from typing import Optional
 
+# VideoLLaMA3 compatibility patch for newer transformers versions
+try:
+    import transformers.image_utils
+    if not hasattr(transformers.image_utils, "VideoInput"):
+        from transformers.video_utils import VideoInput
+        transformers.image_utils.VideoInput = VideoInput
+except ImportError:
+    pass
+
 from src.models.base import VideoSituationModel
 from src.analysis.schema import SituationAnalysis, SituationLabel, RiskLevel
 from src.utils.json_utils import safe_parse_json
