@@ -16,6 +16,29 @@ try:
 except ImportError:
     pass
 
+try:
+    import transformers.dynamic_module_utils as dynamic_utils
+    if hasattr(dynamic_utils, "get_class_from_dynamic_module"):
+        original_get_class = dynamic_utils.get_class_from_dynamic_module
+
+        def patched_get_class(*args, **kwargs):
+            class_obj = original_get_class(*args, **kwargs)
+            if class_obj and getattr(class_obj, "__name__", None) == "Videollama3Qwen2Processor":
+                original_get_args = class_obj._get_arguments_from_pretrained
+                
+                @classmethod
+                def robust_get_args(cls, pretrained_model_name_or_path, *args_inner, **kwargs_inner):
+                    # Newer transformers pass processor_dict as a 2nd positional argument,
+                    # but VideoLLaMA3's custom processor takes only (pretrained_model_name_or_path, **kwargs)
+                    return original_get_args(pretrained_model_name_or_path, **kwargs_inner)
+                
+                class_obj._get_arguments_from_pretrained = robust_get_args
+            return class_obj
+
+        dynamic_utils.get_class_from_dynamic_module = patched_get_class
+except Exception:
+    pass
+
 from src.models.base import VideoSituationModel
 from src.analysis.schema import SituationAnalysis, SituationLabel, RiskLevel
 from src.utils.json_utils import safe_parse_json
