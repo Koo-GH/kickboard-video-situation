@@ -37,9 +37,17 @@ def get_model(model_type: str, model_path: str | None = None, n_frames: int = 16
             console.print(f"[red]Qwen2.5-VL 로드 실패: {e}[/red]")
             console.print("[yellow]torch/transformers가 설치되어 있는지 확인하세요.[/yellow]")
             sys.exit(1)
+    elif model_type == "videollama3":
+        try:
+            from src.models.videollama import VideoLLaMA3Model
+            return VideoLLaMA3Model(model_path=model_path, n_frames=n_frames)
+        except ImportError as e:
+            console.print(f"[red]VideoLLaMA3 로드 실패: {e}[/red]")
+            console.print("[yellow]torch/transformers가 설치되어 있는지 확인하세요.[/yellow]")
+            sys.exit(1)
     else:
         console.print(f"[red]알 수 없는 모델 타입: {model_type}[/red]")
-        console.print("지원 모델: mock, qwen2_5_vl")
+        console.print("지원 모델: mock, qwen2_5_vl, videollama3")
         sys.exit(1)
 
 
@@ -124,13 +132,13 @@ def main():
     parser.add_argument(
         "--model",
         default="mock",
-        choices=["mock", "qwen2_5_vl"],
+        choices=["mock", "qwen2_5_vl", "videollama3"],
         help="사용할 모델 (기본: mock)",
     )
     parser.add_argument(
         "--model-path",
         default=None,
-        help="로컬 모델 경로 (qwen2_5_vl 사용 시 필요)",
+        help="로컬 모델 경로 (qwen2_5_vl / videollama3 사용 시 필요)",
     )
     parser.add_argument(
         "--output",
