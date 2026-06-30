@@ -120,7 +120,7 @@ def run(args):
     for v_path in video_paths:
         analyze_video(model, v_path, output_dir)
 
-    console.print(f"\n[bold green]✔ 모든 영상({len(video_paths)}개) 분석 및 저장이 완료되었습니다![/bold green]")
+    console.print(f"\n[bold green]모든 영상({len(video_paths)}개) 분석 및 저장이 완료되었습니다![/bold green]")
 
 
 def main():
