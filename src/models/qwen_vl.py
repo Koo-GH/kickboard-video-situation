@@ -5,8 +5,12 @@ GPU 서버 또는 Windows GTX 1080에서 실행된다.
 """
 from __future__ import annotations
 import json
+import os
 from pathlib import Path
 from typing import Optional
+
+# Qwen2.5-VL video reading deadlock prevention with decord
+os.environ["FORCE_QWENVL_VIDEO_READER"] = "cv2"
 
 from src.models.base import VideoSituationModel
 from src.analysis.schema import SituationAnalysis, SituationLabel, RiskLevel
