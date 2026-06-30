@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Optional
 
 # Qwen2.5-VL video reading deadlock prevention with decord
-os.environ["FORCE_QWENVL_VIDEO_READER"] = "cv2"
+os.environ["FORCE_QWENVL_VIDEO_READER"] = "torchvision"
 
 from src.models.base import VideoSituationModel
 from src.analysis.schema import SituationAnalysis, SituationLabel, RiskLevel
