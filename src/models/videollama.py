@@ -119,18 +119,18 @@ class VideoLLaMA3Model(VideoSituationModel):
         try:
             self._model = AutoModelForCausalLM.from_pretrained(
                 path_str,
-                dtype=dtype,
+                torch_dtype=dtype,
                 device_map=device_map,
                 trust_remote_code=True,
                 attn_implementation=attn_impl,
                 local_files_only=local_files,
             )
-        except Exception as e:
-            # flash_attention_2 미지원/미설치 대비 fallback
+        except ImportError as e:
+            # flash_attention_2 미설치 대비 sdpa fallback
             console.print(f"[yellow]attn_impl='{attn_impl}' 실패 ({e}). 기본 sdpa로 재시도합니다.[/yellow]")
             self._model = AutoModelForCausalLM.from_pretrained(
                 path_str,
-                dtype=dtype,
+                torch_dtype=dtype,
                 device_map=device_map,
                 trust_remote_code=True,
                 attn_implementation="sdpa",
