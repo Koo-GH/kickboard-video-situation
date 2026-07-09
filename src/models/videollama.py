@@ -119,7 +119,7 @@ class VideoLLaMA3Model(VideoSituationModel):
         try:
             self._model = AutoModelForCausalLM.from_pretrained(
                 path_str,
-                torch_dtype=dtype,
+                dtype=dtype,
                 device_map=device_map,
                 trust_remote_code=True,
                 attn_implementation=attn_impl,
@@ -130,7 +130,7 @@ class VideoLLaMA3Model(VideoSituationModel):
             console.print(f"[yellow]attn_impl='{attn_impl}' 실패 ({e}). 기본 sdpa로 재시도합니다.[/yellow]")
             self._model = AutoModelForCausalLM.from_pretrained(
                 path_str,
-                torch_dtype=dtype,
+                dtype=dtype,
                 device_map=device_map,
                 trust_remote_code=True,
                 attn_implementation="sdpa",
