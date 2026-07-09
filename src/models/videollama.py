@@ -126,14 +126,14 @@ class VideoLLaMA3Model(VideoSituationModel):
                 local_files_only=local_files,
             )
         except ImportError as e:
-            # flash_attention_2 미설치 대비 eager fallback
-            console.print(f"[yellow]attn_impl='{attn_impl}' 실패 ({e}). eager 모드로 재시도합니다.[/yellow]")
+            # flash_attention_2 미설치 대비 sdpa fallback (eager는 OOM 발생)
+            console.print(f"[yellow]attn_impl='{attn_impl}' 실패 ({e}). sdpa 모드로 재시도합니다.[/yellow]")
             self._model = AutoModelForCausalLM.from_pretrained(
                 path_str,
                 torch_dtype=dtype,
                 device_map=device_map,
                 trust_remote_code=True,
-                attn_implementation="eager",
+                attn_implementation="sdpa",
                 local_files_only=local_files,
             )
 
