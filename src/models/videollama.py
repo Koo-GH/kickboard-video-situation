@@ -162,6 +162,7 @@ class VideoLLaMA3Model(VideoSituationModel):
                             "video_path": str(video_path),
                             "fps": 1,
                             "max_frames": self._n_frames,
+                            "max_pixels": 262144, # 512x512 수준으로 해상도 제한 (OOM 방지)
                         }
                     },
                     {"type": "text", "text": SYSTEM_PROMPT},
