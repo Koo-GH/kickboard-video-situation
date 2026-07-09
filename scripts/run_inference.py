@@ -52,8 +52,14 @@ def get_model(model_type: str, model_path: str | None = None, n_frames: int = 16
 
 
 def analyze_video(model, video_path: Path, output_dir: Path):
+    import gc
+    import torch
     console.print(f"\n[bold cyan]▶ 영상 분석 중: {video_path.name}[/bold cyan]")
     result = model.analyze(video_path)
+    # 영상 분석 후 GPU 메모리 정리 (연속 분석 시 OOM 방지)
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
     # 결과 저장
     json_path = output_dir / f"{video_path.stem}_output.json"
