@@ -114,7 +114,7 @@ class QwenVLModel(VideoSituationModel):
                     {
                         "type": "video",
                         "video": str(video_path),
-                        "max_pixels": 768 * 768,
+                        "max_pixels": 262144, # 512x512 수준으로 해상도 제한 (OOM 방지)
                         "nframes": self._n_frames,
                     },
                     {"type": "text", "text": SYSTEM_PROMPT},
