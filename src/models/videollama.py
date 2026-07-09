@@ -113,7 +113,7 @@ class VideoLLaMA3Model(VideoSituationModel):
             device_map = "auto" if self._device == "auto" else self._device
         else:
             dtype = torch.float32
-            attn_impl = "sdpa"
+            attn_impl = "eager"
             device_map = None
 
         try:
@@ -126,14 +126,14 @@ class VideoLLaMA3Model(VideoSituationModel):
                 local_files_only=local_files,
             )
         except ImportError as e:
-            # flash_attention_2 미설치 대비 sdpa fallback
-            console.print(f"[yellow]attn_impl='{attn_impl}' 실패 ({e}). 기본 sdpa로 재시도합니다.[/yellow]")
+            # flash_attention_2 미설치 대비 eager fallback
+            console.print(f"[yellow]attn_impl='{attn_impl}' 실패 ({e}). eager 모드로 재시도합니다.[/yellow]")
             self._model = AutoModelForCausalLM.from_pretrained(
                 path_str,
                 torch_dtype=dtype,
                 device_map=device_map,
                 trust_remote_code=True,
-                attn_implementation="sdpa",
+                attn_implementation="eager",
                 local_files_only=local_files,
             )
 
