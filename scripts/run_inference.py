@@ -54,8 +54,32 @@ def get_model(model_type: str, model_path: str | None = None, n_frames: int = 16
 def analyze_video(model, video_path: Path, output_dir: Path):
     import gc
     import torch
+    import subprocess
+    import tempfile
+    import os
+
     console.print(f"\n[bold cyan]▶ 영상 분석 중: {video_path.name}[/bold cyan]")
-    result = model.analyze(video_path)
+    
+    # 임시 폴더에 해상도 축소된 영상 생성 (OOM 방지 및 다중 프레임 확보)
+    fd, temp_video_path = tempfile.mkstemp(suffix=".mp4")
+    os.close(fd)
+    
+    try:
+        console.print("  [dim]... 해상도 최적화(Downscale) 중...[/dim]")
+        # 최대 가로/세로 512픽셀로 비율 유지 축소, 오디오 제거
+        subprocess.run([
+            "ffmpeg", "-y", "-i", str(video_path),
+            "-vf", "scale='min(512,iw)':'min(512,ih)':force_original_aspect_ratio=decrease",
+            "-c:v", "libx264", "-crf", "28", "-preset", "fast", "-an",
+            temp_video_path
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        
+        # 축소된 임시 영상으로 분석 수행 (여러 프레임도 안전하게 처리 가능)
+        result = model.analyze(Path(temp_video_path))
+    finally:
+        # 분석이 끝나면 임시 영상 삭제
+        if os.path.exists(temp_video_path):
+            os.remove(temp_video_path)
     # 영상 분석 후 GPU 메모리 정리 (연속 분석 시 OOM 방지)
     gc.collect()
     if torch.cuda.is_available():
