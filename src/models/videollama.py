@@ -197,6 +197,15 @@ class VideoLLaMA3Model(VideoSituationModel):
             skip_special_tokens=True,
         )[0].strip()
 
+        # 추론 후 텐서 명시적 해제 (연속 분석 시 OOM 방지)
+        del output_ids
+        if "pixel_values" in inputs:
+            del inputs["pixel_values"]
+        del inputs
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+            torch.cuda.empty_cache()
+
         return self._parse_response(output_text)
 
     def _parse_response(self, text: str) -> SituationAnalysis:
